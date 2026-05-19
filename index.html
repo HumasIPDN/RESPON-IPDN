@@ -57,6 +57,7 @@
     .loading.hide{
       opacity:0;
       visibility:hidden;
+      pointer-events:none;
     }
 
     .spinner{
@@ -82,9 +83,7 @@
 
 <!-- LOADING -->
 <div class="loading" id="loading">
-
   <div class="spinner"></div>
-
 </div>
 
 <!-- IFRAME -->
@@ -115,14 +114,78 @@ const GAS_URL =
 "https://script.google.com/a/ipdn.ac.id/macros/s/AKfycbyLvQmxFyYL6CDf7g21o7P3nD4zRbAogYBO6QOsPQiVsyb1y0Bd4TjjN5PspPXBUHp6Aw/exec";
 
 /* =====================================================
+   HELPER PARAMETER
+
+   Contoh:
+   GitHub:
+   https://humasipdn.github.io/RESPON-IPDN/?token=xxx&nama=Admin#admin
+
+   Dikirim ke Apps Script:
+   GAS_URL?page=admin&token=xxx&nama=Admin
+===================================================== */
+
+function getExtraParams(){
+
+  const search =
+  window.location.search || "";
+
+  if(!search){
+    return "";
+  }
+
+  return search.replace("?", "&");
+
+}
+
+function setIframePage(page){
+
+  loading.classList.remove("hide");
+
+  const extraParams =
+  getExtraParams();
+
+  iframe.src =
+  GAS_URL + "?page=" + encodeURIComponent(page) + extraParams;
+
+}
+
+function setIframeHome(){
+
+  loading.classList.remove("hide");
+
+  iframe.src =
+  GAS_URL + getExtraParams().replace("&", "?");
+
+}
+
+/* =====================================================
    ROUTER
 ===================================================== */
 
 function loadPage(){
 
-  loading.classList.remove("hide");
+  const hash =
+  window.location.hash || "";
 
-  const hash = location.hash;
+  /* =========================================
+     PORTAL UTAMA
+  ========================================= */
+
+  if(
+    hash === "" ||
+    hash === "#" ||
+    hash === "#portal" ||
+    hash === "#beranda"
+  ){
+
+    loading.classList.remove("hide");
+
+    iframe.src =
+    GAS_URL;
+
+    return;
+
+  }
 
   /* =========================================
      PENGADUAN & PERMINTAAN INFORMASI
@@ -130,43 +193,108 @@ function loadPage(){
 
   if(hash === "#formulir"){
 
-    iframe.src =
-    GAS_URL + "?page=masyarakat";
+    setIframePage("masyarakat");
+    return;
 
   }
 
   /* =========================================
-     CEK STATUS
+     CEK STATUS NOMOR LAYANAN
   ========================================= */
 
-  else if(hash === "#cek"){
+  if(hash === "#cek"){
 
-    iframe.src =
-    GAS_URL + "?page=cek";
+    setIframePage("cek");
+    return;
 
   }
 
   /* =========================================
-     PORTAL INTERNAL
+     LOGIN INTERNAL
   ========================================= */
 
-  else if(hash === "#login_internal"){
+  if(hash === "#login_internal"){
 
-    iframe.src =
-    GAS_URL + "?page=login_internal";
+    setIframePage("login_internal");
+    return;
 
   }
 
   /* =========================================
-     DEFAULT = PORTAL UTAMA
+     ADMIN
   ========================================= */
 
-  else{
+  if(hash === "#admin"){
 
-    iframe.src =
-    GAS_URL;
+    setIframePage("admin");
+    return;
 
   }
+
+  /* =========================================
+     BAGIAN / UNIT KERJA
+  ========================================= */
+
+  if(hash === "#bagian"){
+
+    setIframePage("bagian");
+    return;
+
+  }
+
+  /* =========================================
+     VERIFIKATOR / PIMPINAN
+  ========================================= */
+
+  if(hash === "#pimpinan"){
+
+    setIframePage("pimpinan");
+    return;
+
+  }
+
+  /* =========================================
+     MONITORING PIMPINAN
+  ========================================= */
+
+  if(hash === "#monitoring_pimpinan"){
+
+    setIframePage("monitoring_pimpinan");
+    return;
+
+  }
+
+  /* =========================================
+     LAPORAN ADMIN
+  ========================================= */
+
+  if(hash === "#laporan"){
+
+    setIframePage("laporan");
+    return;
+
+  }
+
+  /* =========================================
+     KELOLA USER
+  ========================================= */
+
+  if(hash === "#users"){
+
+    setIframePage("users");
+    return;
+
+  }
+
+  /* =========================================
+     JIKA HASH TIDAK DIKENALI
+     KEMBALI KE PORTAL UTAMA
+  ========================================= */
+
+  loading.classList.remove("hide");
+
+  iframe.src =
+  GAS_URL;
 
 }
 
