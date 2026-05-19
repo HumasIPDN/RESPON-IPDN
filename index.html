@@ -6,7 +6,6 @@
 
   <title>RESPON IPDN</title>
 
-  <!-- Logo / Favicon -->
   <link rel="icon" href="https://drive.google.com/uc?export=view&id=1JGe42tKH-vLnrAgviP6ZwBIsMSqh8iqF" />
 
   <style>
@@ -15,23 +14,19 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      background-color: #eeeeee;
       overflow: hidden;
-      font-family: Arial, sans-serif;
+      background: #f3f4f6;
     }
 
     .iframe-container {
       width: 100%;
       height: 100dvh;
-      overflow: hidden;
     }
 
     iframe {
-      display: block;
       width: 100%;
       height: 100%;
       border: none;
-      background: white;
     }
   </style>
 </head>
@@ -40,13 +35,9 @@
 
   <div class="iframe-container">
     <iframe
-      id="app"
       src="https://script.google.com/macros/s/AKfycbyLvQmxFyYL6CDf7g21o7P3nD4zRbAogYBO6QOsPQiVsyb1y0Bd4TjjN5PspPXBUHp6Aw/exec"
-      scrolling="yes"
-      allowfullscreen="true"
-      webkitallowfullscreen="true"
-      mozallowfullscreen="true"
-      allow="fullscreen; camera; microphone; display-capture; geolocation;">
+      allow="fullscreen; camera; microphone; geolocation; display-capture"
+      allowfullscreen>
     </iframe>
   </div>
 
