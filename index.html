@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0"/>
 
   <title>RESPON IPDN</title>
 
-  <link rel="icon" href="https://drive.google.com/uc?export=view&id=1JGe42tKH-vLnrAgviP6ZwBIsMSqh8iqF" />
+  <link rel="icon"
+        href="https://drive.google.com/uc?export=view&id=1JGe42tKH-vLnrAgviP6ZwBIsMSqh8iqF" />
 
   <style>
 
-    html, body{
+    *{
       margin:0;
       padding:0;
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
       width:100%;
       height:100%;
       overflow:hidden;
-      background:#eeeeee;
+      background:#f1f5f9;
       font-family:Arial,sans-serif;
     }
 
     .iframe-container{
       width:100%;
       height:100dvh;
+      overflow:hidden;
     }
 
     iframe{
@@ -32,11 +43,51 @@
       background:white;
     }
 
+    .loading{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:white;
+      z-index:9999;
+      transition:0.3s;
+    }
+
+    .loading.hide{
+      opacity:0;
+      visibility:hidden;
+    }
+
+    .spinner{
+      width:48px;
+      height:48px;
+      border:5px solid #dbeafe;
+      border-top:5px solid #2563eb;
+      border-radius:50%;
+      animation:spin 1s linear infinite;
+    }
+
+    @keyframes spin{
+      100%{
+        transform:rotate(360deg);
+      }
+    }
+
   </style>
+
 </head>
 
 <body>
 
+<!-- LOADING -->
+<div class="loading" id="loading">
+
+  <div class="spinner"></div>
+
+</div>
+
+<!-- IFRAME -->
 <div class="iframe-container">
 
   <iframe
@@ -50,30 +101,98 @@
 
 <script>
 
-const iframe = document.getElementById("app");
+const iframe =
+document.getElementById("app");
+
+const loading =
+document.getElementById("loading");
+
+/* =====================================================
+   URL GOOGLE APPS SCRIPT
+===================================================== */
+
+const GAS_URL =
+"https://script.google.com/a/ipdn.ac.id/macros/s/AKfycbyLvQmxFyYL6CDf7g21o7P3nD4zRbAogYBO6QOsPQiVsyb1y0Bd4TjjN5PspPXBUHp6Aw/exec";
+
+/* =====================================================
+   ROUTER
+===================================================== */
 
 function loadPage(){
 
-  // HALAMAN FORMULIR
-  if(location.hash === "#formulir"){
+  loading.classList.remove("hide");
+
+  const hash = location.hash;
+
+  /* =========================================
+     PENGADUAN & PERMINTAAN INFORMASI
+  ========================================= */
+
+  if(hash === "#formulir"){
 
     iframe.src =
-    "https://script.google.com/a/ipdn.ac.id/macros/s/AKfycbyLvQmxFyYL6CDf7g21o7P3nD4zRbAogYBO6QOsPQiVsyb1y0Bd4TjjN5PspPXBUHp6Aw/exec?page=masyarakat";
+    GAS_URL + "?page=masyarakat";
 
   }
 
-  // HALAMAN UTAMA
+  /* =========================================
+     CEK STATUS
+  ========================================= */
+
+  else if(hash === "#cek"){
+
+    iframe.src =
+    GAS_URL + "?page=cek";
+
+  }
+
+  /* =========================================
+     PORTAL INTERNAL
+  ========================================= */
+
+  else if(hash === "#login_internal"){
+
+    iframe.src =
+    GAS_URL + "?page=login_internal";
+
+  }
+
+  /* =========================================
+     DEFAULT = PORTAL UTAMA
+  ========================================= */
+
   else{
 
     iframe.src =
-    "https://script.google.com/a/ipdn.ac.id/macros/s/AKfycbyLvQmxFyYL6CDf7g21o7P3nD4zRbAogYBO6QOsPQiVsyb1y0Bd4TjjN5PspPXBUHp6Aw/exec";
+    GAS_URL;
 
   }
 
 }
 
-window.addEventListener("load", loadPage);
-window.addEventListener("hashchange", loadPage);
+/* =====================================================
+   EVENT
+===================================================== */
+
+window.addEventListener(
+  "load",
+  loadPage
+);
+
+window.addEventListener(
+  "hashchange",
+  loadPage
+);
+
+/* =====================================================
+   IFRAME LOADED
+===================================================== */
+
+iframe.onload = function(){
+
+  loading.classList.add("hide");
+
+};
 
 </script>
 
